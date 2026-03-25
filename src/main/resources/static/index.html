@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDG Group - Plataforma</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        :root {
+            --bg-body: #f8fafc; --card-bg: #ffffff; --primary: #0f172a;
+            --accent: #2563eb; --accent-hover: #1d4ed8; --danger: #ef4444;
+            --success: #10b981; --text-main: #334155; --text-muted: #64748b;
+            --border-color: #e2e8f0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%); min-height: 100vh; color: var(--text-main); }
+
+        .navbar { background-color: var(--primary); padding: 16px 40px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); color: white; }
+        .navbar-brand { font-weight: 700; font-size: 1.2rem; display: flex; align-items: center; gap: 8px; }
+        .navbar-links { display: flex; gap: 10px; }
+        .nav-btn { background: transparent; color: #cbd5e1; border: none; padding: 8px 16px; border-radius: 8px; font-size: 0.95rem; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+        .nav-btn:hover { color: white; background: rgba(255,255,255,0.1); }
+        .nav-btn.active { color: white; background: var(--accent); }
+
+        .container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
+        .view-section { display: none; }
+        .view-section.active { display: block; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .home-grid { display: grid; grid-template-columns: 1fr; gap: 30px; margin-top: 40px; }
+        @media (min-width: 600px) { .home-grid { grid-template-columns: 1fr 1fr; } }
+        .role-card { background: var(--card-bg); padding: 50px 30px; border-radius: 16px; text-align: center; cursor: pointer; border: 2px solid transparent; transition: all 0.3s ease; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05); }
+        .role-card:hover { border-color: var(--accent); transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(37, 99, 235, 0.1); }
+        .role-icon { font-size: 4rem; margin-bottom: 20px; display: block; }
+        .role-title { font-size: 1.5rem; font-weight: 700; color: var(--primary); margin-bottom: 10px; }
+        .role-desc { color: var(--text-muted); font-size: 0.95rem; }
+
+        .card { background: var(--card-bg); border-radius: 16px; padding: 32px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05); border: 1px solid rgba(255, 255, 255, 0.8); }
+        .card-header { margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color); }
+        .card-header h2 { font-size: 1.4rem; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 10px; }
+        .input-group { display: flex; gap: 12px; margin-bottom: 20px; }
+        input[type="text"] { flex: 1; padding: 14px 18px; border: 1px solid var(--border-color); border-radius: 10px; font-size: 1rem; font-family: 'Inter', sans-serif; transition: all 0.3s ease; background: #f8fafc; }
+        input[type="text"]:focus { outline: none; border-color: var(--accent); background: #fff; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15); }
+        button { padding: 14px 24px; border: none; border-radius: 10px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover:not(:disabled) { background: #1e293b; transform: translateY(-1px); }
+        .btn-secondary { background: #f1f5f9; color: var(--text-main); border: 1px solid var(--border-color); }
+        .btn-secondary:hover:not(:disabled) { background: #e2e8f0; }
+        .btn-danger { background: #fef2f2; color: var(--danger); border: 1px solid #fecaca; }
+        .btn-danger:hover:not(:disabled) { background: #fee2e2; }
+        button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        .status-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 9999px; font-size: 0.85rem; font-weight: 600; background: #fef2f2; color: var(--danger); margin-bottom: 20px; border: 1px solid #fecaca; transition: all 0.3s ease; }
+        .status-badge::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--danger); }
+        .status-badge.connected { background: #ecfdf5; color: var(--success); border-color: #a7f3d0; }
+        .status-badge.connected::before { background: var(--success); box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2); animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); } 70% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
+
+        .chat-layout { display: grid; grid-template-columns: 220px 1fr; gap: 20px; margin-top: 20px; }
+        .user-list-container { background: #f8fafc; border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; height: 350px; overflow-y: auto; }
+        .user-item { padding: 10px 12px; border-radius: 8px; cursor: pointer; margin-bottom: 6px; transition: all 0.2s; display: flex; align-items: center; justify-content: space-between; background: white; border: 1px solid #e2e8f0; font-size: 0.95rem; font-weight: 500; }
+        .user-item:hover { background: #e0f2fe; border-color: #bae6fd; }
+        .user-item.active { background: var(--accent); color: white; border-color: var(--accent); }
+        .messages-container { background: #f8fafc; border: 1px solid var(--border-color); border-radius: 12px; height: 280px; overflow-y: auto; padding: 20px; margin-bottom: 12px; }
+        .messages-container::-webkit-scrollbar { width: 8px; }
+        .messages-container::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .msg { padding: 12px 16px; background: white; border-left: 4px solid var(--accent); margin-bottom: 12px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); font-size: 0.95rem; display: flex; align-items: center; gap: 10px; animation: slideIn 0.3s ease-out; }
+        .msg-time { color: var(--text-muted); font-size: 0.8rem; font-weight: 500; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar-brand">
+        <span style="font-size: 1.5rem;">⚙️</span> SDG Platform
+    </div>
+    <div class="navbar-links">
+        <button id="navHome" class="nav-btn active" onclick="switchView('homeView')">Inicio</button>
+        <button id="navPub" class="nav-btn" onclick="switchView('publisherView')">Publicador</button>
+        <button id="navSub" class="nav-btn" onclick="switchView('subscriberView')">Suscriptor</button>
+    </div>
+</nav>
+
+<div class="container">
+    <div id="homeView" class="view-section active">
+        <div style="text-align: center; margin-bottom: 30px;">
+            <h1 style="color: var(--primary); font-size: 2rem;">Bienvenido al Sistema</h1>
+            <p style="color: var(--text-muted); margin-top: 10px;">Selecciona el rol con el que deseas interactuar</p>
+        </div>
+
+        <div class="home-grid">
+            <div class="role-card" onclick="switchView('publisherView')">
+                <span class="role-icon">📤</span>
+                <h3 class="role-title">Publicador</h3>
+                <p class="role-desc">Envía notificaciones globales vía REST y gestiona la red.</p>
+            </div>
+
+            <div class="role-card" onclick="switchView('subscriberView')">
+                <span class="role-icon">📡</span>
+                <h3 class="role-title">Suscriptor</h3>
+                <p class="role-desc">Conéctate en tiempo real, recibe alertas y chatea en privado.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="publisherView" class="view-section">
+        <div class="card">
+            <div class="card-header">
+                <h2>📤 Panel de Control - Publicador</h2>
+            </div>
+            <div class="input-group">
+                <input type="text" id="mensajeInput" placeholder="Escribe el anuncio para todos...">
+                <button class="btn-primary" onclick="enviarNotificacion()">Enviar Broadcast</button>
+            </div>
+            <button class="btn-secondary" style="width: 100%;" onclick="verSuscriptores()">
+                📋 Consultar Lista de Suscriptores Activos (REST GET)
+            </button>
+        </div>
+    </div>
+
+    <div id="subscriberView" class="view-section">
+        <div class="card">
+            <div class="card-header">
+                <h2>📡 Panel de Conexión - Suscriptor</h2>
+            </div>
+
+            <div id="statusBadge" class="status-badge">Desconectado</div>
+
+            <div class="input-group" id="loginZone">
+                <input type="text" id="usernameInput" placeholder="Introduce tu nombre para entrar (Ej: Juan)">
+                <button id="btnSubscribe" class="btn-primary" onclick="connect()">🔌 Conectar</button>
+            </div>
+            <button id="btnDisconnect" class="btn-danger" style="margin-bottom: 20px; display: none;" onclick="disconnect()">🛑 Desconectar</button>
+
+            <div id="chatInterface" class="chat-layout" style="display: none;">
+
+                <div class="user-list-container">
+                    <h3 style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 12px; text-align: center; font-weight: 600;">Contactos</h3>
+                    <div id="activeUsersList"></div>
+                </div>
+
+                <div style="display: flex; flex-direction: column;">
+                    <div class="messages-container" id="messages">
+                    </div>
+
+                    <div id="privateChatControls" style="display: none; background: #f0fdf4; padding: 15px; border-radius: 12px; border: 1px solid #bbf7d0;">
+                        <span id="chatTargetName" style="display: block; font-weight: 700; font-size: 0.85rem; color: #166534; margin-bottom: 10px;"></span>
+                        <div class="input-group" style="margin-bottom: 0;">
+                            <input type="text" id="privateMessage" placeholder="Escribe un mensaje..." style="background: white;">
+                            <button class="btn-primary" onclick="enviarMensajePrivado()">Enviar</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.onload = function() { switchView('homeView'); };
+
+    function switchView(viewId) {
+        document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+        document.getElementById(viewId).classList.add('active');
+        document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+        if(viewId === 'homeView') document.getElementById('navHome').classList.add('active');
+        if(viewId === 'publisherView') document.getElementById('navPub').classList.add('active');
+        if(viewId === 'subscriberView') document.getElementById('navSub').classList.add('active');
+    }
+
+    function enviarNotificacion() {
+        const texto = document.getElementById("mensajeInput").value.trim();
+        if(!texto) return;
+        fetch('/api/publisher/notifications', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: texto }) })
+            .then(() => { document.getElementById("mensajeInput").value = ""; });
+    }
+
+    function verSuscriptores() {
+        fetch('/api/publisher/subscribers')
+            .then(res => res.json())
+            .then(data => alert(data.length > 0 ? `Total: ${data.length}\n\n${data.join('\n')}` : "Nadie conectado."));
+    }
+
+    let ws;
+    let myUsername = "";
+    let currentChatTarget = "GLOBAL";
+
+    let chatHistories = {};
+
+    let unreadMessages = {};
+    let lastKnownUsers = [];
+
+    function connect() {
+        myUsername = document.getElementById("usernameInput").value.trim();
+        if(!myUsername) return;
+        if (ws && ws.readyState === WebSocket.OPEN) return;
+
+        ws = new WebSocket((window.location.protocol === 'https:' ? 'wss://' : 'ws://') + window.location.host + "/ws/notifications?user=" + myUsername);
+
+        ws.onopen = () => {
+            document.getElementById("statusBadge").innerText = "Conectado como: " + myUsername;
+            document.getElementById("statusBadge").classList.add("connected");
+            document.getElementById("loginZone").style.display = "none";
+            document.getElementById("btnDisconnect").style.display = "inline-flex";
+            document.getElementById("chatInterface").style.display = "grid";
+
+            chatHistories = { "GLOBAL": [] };
+            unreadMessages = {};
+            seleccionarUsuario("GLOBAL");
+        };
+
+        ws.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            if (data.type === "USER_LIST") {
+                lastKnownUsers = data.users;
+                actualizarListaUsuarios();
+                return;
+            }
+
+            const hora = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+            let formatoHtml = "";
+
+            if (data.type === "BROADCAST") {
+                formatoHtml = `<div class="msg" style="border-left-color: #f59e0b; background: #fffbeb;"><span class="msg-time">[${hora}]</span> 📣 <b>A TODOS:</b> ${data.text}</div>`;
+                guardarYMostrarMensaje("GLOBAL", formatoHtml);
+            } else if (data.type === "PRIVATE") {
+                formatoHtml = `<div class="msg" style="border-left-color: #10b981; background-color: #ecfdf5;"><span class="msg-time">[${hora}]</span> 💬 <b>De ${data.from}:</b> ${data.text}</div>`;
+                guardarYMostrarMensaje(data.from, formatoHtml);
+            } else if (data.type === "SYSTEM") {
+                formatoHtml = `<div class="msg" style="border-left-color: #ef4444;"><span class="msg-time">[${hora}]</span> ⚠️ <i>${data.text}</i></div>`;
+                guardarYMostrarMensaje(currentChatTarget, formatoHtml);
+            }
+        };
+
+        ws.onclose = () => {
+            document.getElementById("statusBadge").innerText = "Desconectado";
+            document.getElementById("statusBadge").classList.remove("connected");
+            document.getElementById("loginZone").style.display = "flex";
+            document.getElementById("btnDisconnect").style.display = "none";
+            document.getElementById("chatInterface").style.display = "none";
+            chatHistories = {};
+        };
+    }
+
+    function disconnect() { if (ws) ws.close(); }
+
+    function guardarYMostrarMensaje(usuario, htmlMsg) {
+        if (!chatHistories[usuario]) {
+            chatHistories[usuario] = [];
+        }
+        chatHistories[usuario].push(htmlMsg);
+
+        if (currentChatTarget === usuario) {
+            const messagesDiv = document.getElementById("messages");
+            if(messagesDiv.innerHTML.includes("No hay mensajes previos")) {
+                messagesDiv.innerHTML = "";
+            }
+            messagesDiv.innerHTML += htmlMsg;
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        } else {
+            unreadMessages[usuario] = true;
+            actualizarListaUsuarios();
+        }
+    }
+
+    function actualizarListaUsuarios() {
+        const listDiv = document.getElementById("activeUsersList");
+        listDiv.innerHTML = "";
+
+        const globalActive = (currentChatTarget === "GLOBAL") ? "active" : "";
+        const globalUnread = unreadMessages["GLOBAL"] ? '<span>🔴</span>' : '';
+        listDiv.innerHTML += `<div class="user-item ${globalActive}" onclick="seleccionarUsuario('GLOBAL')" style="font-weight: bold; border-left: 4px solid #f59e0b;"><span>📢 Sala Global</span> ${globalUnread}</div>`;
+
+        lastKnownUsers.forEach(u => {
+            if(u !== myUsername) {
+                const isActive = (u === currentChatTarget) ? "active" : "";
+                const unread = unreadMessages[u] ? '<span>🔴</span>' : '';
+                listDiv.innerHTML += `<div class="user-item ${isActive}" onclick="seleccionarUsuario('${u}')"><span>${u}</span> ${unread}</div>`;
+            }
+        });
+    }
+
+    function seleccionarUsuario(usuario) {
+        currentChatTarget = usuario;
+        unreadMessages[usuario] = false;
+        actualizarListaUsuarios();
+
+        if (usuario === "GLOBAL") {
+            document.getElementById("privateChatControls").style.display = "none";
+        } else {
+            document.getElementById("privateChatControls").style.display = "block";
+            document.getElementById("chatTargetName").innerText = "Chat con: " + usuario;
+            document.getElementById("privateMessage").focus();
+        }
+
+        const messagesDiv = document.getElementById("messages");
+        messagesDiv.innerHTML = "";
+
+        if (chatHistories[usuario] && chatHistories[usuario].length > 0) {
+            messagesDiv.innerHTML = chatHistories[usuario].join("");
+        } else {
+            let textoVacio = usuario === "GLOBAL"
+                ? "Los anuncios del Publicador aparecerán aquí..."
+                : `No hay mensajes previos con ${usuario}. ¡Rompe el hielo!`;
+            messagesDiv.innerHTML = `<div style="color: var(--text-muted); text-align: center; margin-top: 40px;">${textoVacio}</div>`;
+        }
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    function enviarMensajePrivado() {
+        if(!currentChatTarget || currentChatTarget === "GLOBAL") return;
+        const input = document.getElementById("privateMessage");
+        const text = input.value.trim();
+        if(!text) return;
+
+        ws.send(JSON.stringify({ to: currentChatTarget, text: text }));
+
+        const hora = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+        const formatoHtml = `
+                <div class="msg" style="border-left-color: #3b82f6; background: #eff6ff; text-align: right; justify-content: flex-end;">
+                    <span class="msg-time">[${hora}]</span> 📤 <b>Tú:</b> ${text}
+                </div>`;
+
+        guardarYMostrarMensaje(currentChatTarget, formatoHtml);
+        input.value = "";
+    }
+
+    document.getElementById("privateMessage").addEventListener("keypress", function(e) { if (e.key === "Enter") { e.preventDefault(); enviarMensajePrivado(); } });
+    document.getElementById("mensajeInput").addEventListener("keypress", function(e) { if (e.key === "Enter") { e.preventDefault(); enviarNotificacion(); } });
+</script>
+</body>
+</html>
