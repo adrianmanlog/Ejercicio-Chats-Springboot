@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SDG Group - Plataforma</title>
+    <title>SDG Group - Platform</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
@@ -69,38 +69,37 @@
         .msg { padding: 12px 16px; background: white; border-left: 4px solid var(--accent); margin-bottom: 12px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); font-size: 0.95rem; display: flex; align-items: center; gap: 10px; animation: slideIn 0.3s ease-out; }
         .msg-time { color: var(--text-muted); font-size: 0.8rem; font-weight: 500; }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 </head>
 <body>
 
 <nav class="navbar">
     <div class="navbar-brand">
-        <span style="font-size: 1.5rem;">⚙️</span> SDG Platform
+        <span style="font-size: 1.5rem;"></span> SDG Platform
     </div>
     <div class="navbar-links">
-        <button id="navHome" class="nav-btn active" onclick="switchView('homeView')">Inicio</button>
-        <button id="navPub" class="nav-btn" onclick="switchView('publisherView')">Publicador</button>
-        <button id="navSub" class="nav-btn" onclick="switchView('subscriberView')">Suscriptor</button>
+        <button id="navHome" class="nav-btn active" onclick="switchView('homeView')">Home</button>
+        <button id="navPub" class="nav-btn" onclick="switchView('publisherView')">Publisher</button>
+        <button id="navSub" class="nav-btn" onclick="switchView('subscriberView')">Subscriber</button>
     </div>
 </nav>
 
 <div class="container">
     <div id="homeView" class="view-section active">
         <div style="text-align: center; margin-bottom: 30px;">
-            <h1 style="color: var(--primary); font-size: 2rem;">Bienvenido al Sistema</h1>
-            <p style="color: var(--text-muted); margin-top: 10px;">Selecciona el rol con el que deseas interactuar</p>
+            <h1 style="color: var(--primary); font-size: 2rem;">Welcome to the System</h1>
+            <p style="color: var(--text-muted); margin-top: 10px;">Select the role you wish to interact with</p>
         </div>
 
         <div class="home-grid">
             <div class="role-card" onclick="switchView('publisherView')">
-                <span class="role-icon">📤</span>
-                <h3 class="role-title">Publicador</h3>
-                <p class="role-desc">Envía notificaciones globales vía REST y gestiona la red.</p>
+                <h3 class="role-title">Publisher</h3>
+                <p class="role-desc">Send global notifications via REST and manage the network.</p>
             </div>
 
             <div class="role-card" onclick="switchView('subscriberView')">
-                <span class="role-icon">📡</span>
-                <h3 class="role-title">Suscriptor</h3>
-                <p class="role-desc">Conéctate en tiempo real, recibe alertas y chatea en privado.</p>
+                <h3 class="role-title">Subscriber</h3>
+                <p class="role-desc">Connect in real time, receive alerts, and chat privately.</p>
             </div>
         </div>
     </div>
@@ -108,14 +107,14 @@
     <div id="publisherView" class="view-section">
         <div class="card">
             <div class="card-header">
-                <h2>📤 Panel de Control - Publicador</h2>
+                <h2>Control Panel - Publisher</h2>
             </div>
             <div class="input-group">
-                <input type="text" id="mensajeInput" placeholder="Escribe el anuncio para todos...">
-                <button class="btn-primary" onclick="enviarNotificacion()">Enviar Broadcast</button>
+                <input type="text" id="mensajeInput" placeholder="Write the announcement for everyone...">
+                <button class="btn-primary" onclick="enviarNotificacion()">Send Broadcast</button>
             </div>
             <button class="btn-secondary" style="width: 100%;" onclick="verSuscriptores()">
-                📋 Consultar Lista de Suscriptores Activos (REST GET)
+                View Active Subscribers List (REST GET)
             </button>
         </div>
     </div>
@@ -123,21 +122,21 @@
     <div id="subscriberView" class="view-section">
         <div class="card">
             <div class="card-header">
-                <h2>📡 Panel de Conexión - Suscriptor</h2>
+                <h2>Connection Panel - Subscriber</h2>
             </div>
 
-            <div id="statusBadge" class="status-badge">Desconectado</div>
+            <div id="statusBadge" class="status-badge">Disconnected</div>
 
             <div class="input-group" id="loginZone">
-                <input type="text" id="usernameInput" placeholder="Introduce tu nombre para entrar (Ej: Juan)">
-                <button id="btnSubscribe" class="btn-primary" onclick="connect()">🔌 Conectar</button>
+                <input type="text" id="usernameInput" placeholder="Enter your name to join (e.g., John)">
+                <button id="btnSubscribe" class="btn-primary" onclick="connect()">🔌 Connect</button>
             </div>
-            <button id="btnDisconnect" class="btn-danger" style="margin-bottom: 20px; display: none;" onclick="disconnect()">🛑 Desconectar</button>
+            <button id="btnDisconnect" class="btn-danger" style="margin-bottom: 20px; display: none;" onclick="disconnect()">🛑 Disconnect</button>
 
             <div id="chatInterface" class="chat-layout" style="display: none;">
 
                 <div class="user-list-container">
-                    <h3 style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 12px; text-align: center; font-weight: 600;">Contactos</h3>
+                    <h3 style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 12px; text-align: center; font-weight: 600;">Contacts</h3>
                     <div id="activeUsersList"></div>
                 </div>
 
@@ -148,17 +147,17 @@
                     <div id="privateChatControls" style="display: none; background: #f0fdf4; padding: 15px; border-radius: 12px; border: 1px solid #bbf7d0;">
                         <span id="chatTargetName" style="display: block; font-weight: 700; font-size: 0.85rem; color: #166534; margin-bottom: 10px;"></span>
                         <div class="input-group" style="margin-bottom: 0;">
-                            <input type="text" id="privateMessage" placeholder="Escribe un mensaje..." style="background: white;">
-                            <button class="btn-primary" onclick="enviarMensajePrivado()">Enviar</button>
+                            <input type="text" id="privateMessage" placeholder="Write a message..." style="background: white;">
+                            <button class="btn-primary" onclick="enviarMensajePrivado()">Send</button>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
 </div>
-
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script>
     window.onload = function() { switchView('homeView'); };
 
@@ -181,7 +180,7 @@
     function verSuscriptores() {
         fetch('/api/publisher/subscribers')
             .then(res => res.json())
-            .then(data => alert(data.length > 0 ? `Total: ${data.length}\n\n${data.join('\n')}` : "Nadie conectado."));
+            .then(data => alert(data.length > 0 ? `Total: ${data.length}\n\n${data.join('\n')}` : "No one connected."));
     }
 
     let ws;
@@ -201,7 +200,7 @@
         ws = new WebSocket((window.location.protocol === 'https:' ? 'wss://' : 'ws://') + window.location.host + "/ws/notifications?user=" + myUsername);
 
         ws.onopen = () => {
-            document.getElementById("statusBadge").innerText = "Conectado como: " + myUsername;
+            document.getElementById("statusBadge").innerText = "Connected as: " + myUsername;
             document.getElementById("statusBadge").classList.add("connected");
             document.getElementById("loginZone").style.display = "none";
             document.getElementById("btnDisconnect").style.display = "inline-flex";
@@ -210,6 +209,13 @@
             chatHistories = { "GLOBAL": [] };
             unreadMessages = {};
             seleccionarUsuario("GLOBAL");
+        };
+
+        toastr.options = {
+            "closeButton": true,
+            "progressBar": true,
+            "positionClass": "toast-bottom-right",
+            "timeOut": "4000",
         };
 
         ws.onmessage = (event) => {
@@ -226,17 +232,31 @@
             if (data.type === "BROADCAST") {
                 formatoHtml = `<div class="msg" style="border-left-color: #f59e0b; background: #fffbeb;"><span class="msg-time">[${hora}]</span> 📣 <b>A TODOS:</b> ${data.text}</div>`;
                 guardarYMostrarMensaje("GLOBAL", formatoHtml);
-            } else if (data.type === "PRIVATE") {
+
+                toastr.info(data.text, "📣 Anuncio del Publicador");
+
+            }else if (data.type === "PRIVATE") {
                 formatoHtml = `<div class="msg" style="border-left-color: #10b981; background-color: #ecfdf5;"><span class="msg-time">[${hora}]</span> 💬 <b>De ${data.from}:</b> ${data.text}</div>`;
                 guardarYMostrarMensaje(data.from, formatoHtml);
+
+                if (currentChatTarget !== data.from) {
+                    toastr.success(data.text, "💬 " + data.from + " te ha escrito");
+                }
+
+            }else if (data.type === "HISTORY_SENT") {
+                formatoHtml = `<div class="msg" style="border-left-color: #3b82f6; background: #eff6ff; text-align: right; justify-content: flex-end;"><span class="msg-time">[Historial]</span> 📤 <b>Tú:</b> ${data.text}</div>`;
+                guardarYMostrarMensaje(data.to, formatoHtml);
+
             } else if (data.type === "SYSTEM") {
                 formatoHtml = `<div class="msg" style="border-left-color: #ef4444;"><span class="msg-time">[${hora}]</span> ⚠️ <i>${data.text}</i></div>`;
                 guardarYMostrarMensaje(currentChatTarget, formatoHtml);
+
+                toastr.error(data.text, "⚠️ Sistema");
             }
         };
 
         ws.onclose = () => {
-            document.getElementById("statusBadge").innerText = "Desconectado";
+            document.getElementById("statusBadge").innerText = "Disconnected";
             document.getElementById("statusBadge").classList.remove("connected");
             document.getElementById("loginZone").style.display = "flex";
             document.getElementById("btnDisconnect").style.display = "none";
@@ -255,7 +275,7 @@
 
         if (currentChatTarget === usuario) {
             const messagesDiv = document.getElementById("messages");
-            if(messagesDiv.innerHTML.includes("No hay mensajes previos")) {
+            if(messagesDiv.innerHTML.includes("No previous messages")) {
                 messagesDiv.innerHTML = "";
             }
             messagesDiv.innerHTML += htmlMsg;
@@ -303,8 +323,8 @@
             messagesDiv.innerHTML = chatHistories[usuario].join("");
         } else {
             let textoVacio = usuario === "GLOBAL"
-                ? "Los anuncios del Publicador aparecerán aquí..."
-                : `No hay mensajes previos con ${usuario}. ¡Rompe el hielo!`;
+                ? "Publisher announcements will appear here..."
+                : `No previous messages with ${usuario}.`;
             messagesDiv.innerHTML = `<div style="color: var(--text-muted); text-align: center; margin-top: 40px;">${textoVacio}</div>`;
         }
         messagesDiv.scrollTop = messagesDiv.scrollHeight;

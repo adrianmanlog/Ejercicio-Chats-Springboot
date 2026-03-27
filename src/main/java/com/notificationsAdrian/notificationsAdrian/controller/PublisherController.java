@@ -20,7 +20,7 @@ public class PublisherController {
     @PostMapping("/notifications")
     public ResponseEntity<String> sendNotification(@RequestBody NotificationRequest request) {
         notificationService.broadcast(request.getMessage());
-        return ResponseEntity.ok("Notificación enviada con éxito a los suscriptores activos.");
+        return ResponseEntity.ok("Notification successfully sent to active subscribers");
     }
 
     @GetMapping("/subscribers")
